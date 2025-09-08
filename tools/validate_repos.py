@@ -97,8 +97,60 @@ out["ok"] = False; out [errors"].append(f"README.md missing")
 
 # CONTRIBUTING (common locations)
 contrib_ok = FALSE
-for parth in 
-    
-                                            
+for path in ("CONTRIBUTING.md", ".github/CONTRIBUTING/md"):
+    s, _, _ = await fetch_json(session, f"{GITHUB_API}/repos/{owner}/{name}/contents/{path}")             
+    if s == 200:
+        contrib_ok = True; break
+    if not contrib_ok:
+        out["ok"] = False; out["errors"].append("CONTRIBUTING.md missing")
+    return out
 
+async def main() -> int:
+    token = os.gettenv("GH_ACCESS_TOKEN") or os.getenv("GITHUB_TOKEN")
+    if not token:
+        print "❌ Set GH_ACCESS_TOKEN (local) or use GitHub Actions GITHUB_TOKEN.", file=sys.stderr)
+        return 2
+    if not os.path.exists(REPO_FILE):
+        print(f"❌ {REPO_FILE} not found.", sile=sys.stderr)
+        return 2
+
+text = open(REPO_FILE, "r", encoding="utf-8").read()
+       repos = parse_repo_paths(text)
+    if not repos:
+        print("❌ No repositories found in data/repositories.toml", file=sys.stderr)
+        return 2
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "goodfirstissue-validator"
+    }              
+
+async with aiohttp.ClientSession(headers=headers) as session:
+        results = await asyncio.gather(*[check_repo(session, r) for r in repos])
+
+    # print table
+    def pad(s, n): return (s if isinstance(s,str) else str(s)).ljust(n)
+    print(pad("REPO", 34), pad("OK", 4), "DETAILS")
+    print("-"*80)
+    failed = 0
+    for r in results:
+        ok = "✅" if r["ok"] else "❌"
+        details = [] if r["ok"] else r["errors"]
+        print(pad(r["repo"], 34), pad(ok, 4), "; ".join(details))
+        if not r["ok"]: failed += 1
+
+    if failed:
+        print(f"\n❌ {failed} repo(s) failed validation.")
+        return 1
+    print("\n✅ All repositories meet the criteria.")
+    return 0
+
+if __name__ == "__main__":
+    try:
+        exit(asyncio.run(main()))
+    except KeyboardInterrupt:
+        exit(130)
         
+
+:s?}:
