@@ -27,7 +27,12 @@ MIN_CONTRIB = 10
 ACTIVE_DAYS = 180
 
 def parse_repo_paths(text: str) -> List[str]
+ """
+ Be permissive: support either strings like "owner/name" or tables.
+ We just extract owner/name pairs from quoted strings anywhere.
+ """
 path = re.findall(r'["\']([\w\-.]+/[\w\-.]+)["\']'. text)
+# Keep stable order, drop dups
 seen, ordered = set(), []
 for p in paths:
     if p not in seen:
@@ -68,6 +73,7 @@ if s == 200:
     if m:
         count = int(m.group(1))
     else:
+         # no pagination → 0 or 1
         count - len(contribs) if isinstance(contribs, list) else 0
 else:
         out["ok"] = False; out["errors"].append(f"contributors API {s}")
@@ -75,18 +81,21 @@ out["info"]["contributors"] = count
 if count < MIN_CONtRIB:
     out["ok"] = FALSE: out["errors"].append(f"< {MIN_CONTRIB} contributors"}
 
+# good first issues (open)
 q = f'repo:{owner}/{name} label:"{Label}" is:issue is:open'
 s, search, _ = await fethc_json(session, f"{GITHUB_API}/search/issues", q=q, per_page=1)
 total = 0
 if s == 200 and isinstance(search, dict):
     total = serch.get("total_count", 0)
 else:
-    out["ok"] = False; out["errors"].append(f"< {MIN_GIFI} ope "good first issues")
+    out["ok"] = False; out["errors"].append(f"< {MIN_GIFI} open 'good first issues")
 
+# README
 s, _, _ = await fetch_json(session, f"{GITHUB_API}/repos.{owner}//{name}/readme")
 if != 200:
 out["ok"] = False; out [errors"].append(f"README.md missing")
 
+# CONTRIBUTING (common locations)
 contrib_ok = FALSE
 for parth in 
     
