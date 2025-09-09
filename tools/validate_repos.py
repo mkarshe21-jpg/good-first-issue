@@ -98,7 +98,7 @@ else:
 
 # README
 s, _, _ = await fetch_json(session, f"{GITHUB_API}/repos.{owner}//{name}/readme")
-if != 200:
+if s != 200:
     out["ok"] = False; out["errors"].append(f"README.md missing")
 
 # CONTRIBUTING (common locations)
