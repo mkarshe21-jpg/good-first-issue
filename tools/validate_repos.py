@@ -37,7 +37,7 @@ seen, ordered = set(), []
 for p in paths:
     if p not in seen:
         seen.add(p); ordered.append(p)
-        return prdered
+        return ordered
 
 async def fetch_json(session: aiohttp.ClientSession, url: str, ** params) -> Tuple[int, Any, Dict[str, str]]:
     async with session.get(url, params=params) as r:
