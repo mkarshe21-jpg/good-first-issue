@@ -54,9 +54,9 @@ async def check_repo(session: aiohttp.ClientSession, repo: str) -> Dict[str,Any]
     
 # repo metadata (for pushed_at)
 s, data, _ = await fetch_json(session, f"{GITHUB_API}/repos/{owner}/{name}")
-    if s != 200:
-        out["ok"] = False; out["errors"].append(f"repo not found ({s})")
-        return out
+if s != 200:
+    out["ok"] = False; out["errors"].append(f"repo not found ({s})")
+    return out
     pushed_at = data.get("pushed_at")
     out["info"]["pushed_at"] = pushed_at
     if pushed_at:
