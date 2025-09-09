@@ -79,7 +79,7 @@ else:
         out["ok"] = False; out["errors"].append(f"contributors API {s}")
 out["info"]["contributors"] = count
 if count < MIN_CONtRIB:
-    out["ok"] = FALSE: out["errors"].append(f"< {MIN_CONTRIB} contributors"}
+    out["ok"] = FALSE: out["errors"].append(f"< {MIN_CONTRIB} contributors")
 
 # good first issues (open)
 q = f'repo:{owner}/{name} label:"{Label}" is:issue is:open'
