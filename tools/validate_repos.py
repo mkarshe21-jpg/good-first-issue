@@ -10,8 +10,8 @@ Exits non-zero if any repo fails; prints a summary table.
 Uses GH_ACCESS_TOKEN or GITHUB_TOKEN for auth.
 """
 
-import asyncio, os, re, sys, time
-from typing import List, Dict, Any, Tuple, Optional
+import asyncio, os, re, sys
+from typing import List, Dict, Any, Tuple
 
 try:
     import tomli as toml  # Python 3.9-friendly
