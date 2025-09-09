@@ -14,9 +14,12 @@ import asyncio, os, re, sys
 from typing import List, Dict, Any, Tuple
 
 try:
-    import tomli as toml  # Python 3.9-friendly
-except Exception:
-    toml = None
+    import tomllib as toml    # Python 3.11+ (built-in)
+except ModuleNotFoundError:
+    try:
+        import tomli as toml  # Python 3.9–3.10 (third-party)
+    except ModuleNotFoundError:
+        toml = None
 
 import aiohttp
 from datetime import datetime, timedelta, timezone
