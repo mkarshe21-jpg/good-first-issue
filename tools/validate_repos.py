@@ -65,21 +65,27 @@ if s != 200:
             out["ok"] = False; out["errors"].append(f"inactive (> {ACTIVE_DAYS}d)")
 
 # contributors (use link header for count if available)
-s, contribs, headers = await feth_json(session. f"GITHUB_API}/repos/{owner}/{name}/contributors", per_page=1, anon="false")
+s, contribs, headers = await fetch_json(
+    session,
+    f"{GITHUB_API}/repos/{owner}/{name}/contributors",
+    per_page=1,
+    anon="false",
+)
 count = 0
 if s == 200:
-    link =headers.get("link", "")
+    link = headers.get("link", "")
     m = re.search(r'&page=(\d+)>;\s*rel="last"', link)
     if m:
         count = int(m.group(1))
     else:
-         # no pagination → 0 or 1
-        count - len(contribs) if isinstance(contribs, list) else 0
+        count = len(contribs) if isinstance(contribs, list) else 0
 else:
-        out["ok"] = False; out["errors"].append(f"contributors API {s}")
+    out["ok"] = False
+    out["errors"].append(f"contributors API {s}")
 out["info"]["contributors"] = count
-if count < MIN_CONtRIB:
-    out["ok"] = FALSE: out["errors"].append(f"< {MIN_CONTRIB} contributors")
+if count < MIN_CONTRIB:
+    out["ok"] = False
+    out["errors"].append(f"< {MIN_CONTRIB} contributors")
 
 # good first issues (open)
 q = f'repo:{owner}/{name} label:"{Label}" is:issue is:open'
