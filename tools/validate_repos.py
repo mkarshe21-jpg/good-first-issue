@@ -136,9 +136,10 @@ async with aiohttp.ClientSession(headers=headers) as session:
     
 # print table
 def pad(s, n): return (s if isinstance(s,str) else str(s)).ljust(n)
-    print(pad("REPO", 34), pad("OK", 4), "DETAILS")
-    print("-"*80)
-    failed = 0
+print(pad("REPO", 34), pad("OK", 4), "DETAILS")
+print("-"*80)
+failed = 0
+
 for r in results:
     ok = "✅" if r["ok"] else "❌"
     details = [] if r["ok"] else r["errors"]
