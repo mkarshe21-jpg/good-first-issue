@@ -108,7 +108,7 @@ for path in ("CONTRIBUTING.md", ".github/CONTRIBUTING/md"):
 async def main() -> int:
     token = os.gettenv("GH_ACCESS_TOKEN") or os.getenv("GITHUB_TOKEN")
     if not token:
-        print "❌ Set GH_ACCESS_TOKEN (local) or use GitHub Actions GITHUB_TOKEN.", file=sys.stderr)
+        print ("❌ Set GH_ACCESS_TOKEN (local) or use GitHub Actions GITHUB_TOKEN.", file=sys.stderr)
         return 2
     if not os.path.exists(REPO_FILE):
         print(f"❌ {REPO_FILE} not found.", sile=sys.stderr)
