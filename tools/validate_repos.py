@@ -26,7 +26,7 @@ MIN_GFI = 3
 MIN_CONTRIB = 10
 ACTIVE_DAYS = 180
 
-def parse_repo_paths(text: str) -> List[str]
+def parse_repo_paths(text: str) -> List[str]:
  """
  Be permissive: support either strings like "owner/name" or tables.
  We just extract owner/name pairs from quoted strings anywhere.
