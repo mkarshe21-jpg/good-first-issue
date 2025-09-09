@@ -121,11 +121,10 @@ async def main() -> int:
         return 2
 
 text = open(REPO_FILE, "r", encoding="utf-8").read()
-       repos = parse_repo_paths(text)
-    if not repos:
-        print("❌ No repositories found in data/repositories.toml", file=sys.stderr)
-        return 2
-
+repos = parse_repo_paths(text)
+if not repos:
+    print("❌ No repositories found in data/repositories.toml", file=sys.stderr)
+    return 2
     headers = {
         "Authorization": f"Bearer {token}",
         "Accept": "application/vnd.github+json",
